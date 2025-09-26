@@ -27,6 +27,23 @@ app.post('/api/save', async (req, res) => {
         res.status(500).json({ error: 'Ошибка передачи', details: err.message });
     }
 });
+app.get('/api/gets', async (req, res) => {
+    try {
+        console.log("dfvfd")
+        fs.readFile(messageFilePath, 'utf8', (err, data) => {
+            if (err) {
+                console.error("Ошибка при чтении файла:", err);
+                return res.status(500).json({ error: 'Ошибка чтения файла', details: err.message });
+            }
+            console.log(data)
+            const messages = data.split('\n').filter(line => line); // Разделяем строки и убираем пустые
+            console.log(messages)
+            res.json({ messages }); // Отправляем сообщения на фронтенд
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Ошибка получения данных' });
+    }
+});
 app.get('/', (req, res) => {
     res.send('Backend работает!');
 });
